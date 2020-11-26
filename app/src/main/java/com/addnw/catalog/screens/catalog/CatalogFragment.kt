@@ -1,15 +1,24 @@
 package com.addnw.catalog.screens.catalog
 
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.addnw.catalog.R
@@ -45,21 +54,27 @@ class CatalogFragment : Fragment() {
         binding.rvCatalog.adapter = CatalogAdapter(civilizations)
         binding.rvCatalog.layoutManager = LinearLayoutManager(context)
 
+        val swipeHandler = object : SwipeToDeleteCallback(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                (binding.rvCatalog.adapter as CatalogAdapter).removeAt(viewHolder.adapterPosition)
+            }
+        }
 
+        ItemTouchHelper(swipeHandler).attachToRecyclerView(binding.rvCatalog)
         return binding.root
     }
 }
 
-class CatalogAdapter (private val civilizations: List<Civilization>): RecyclerView.Adapter<CatalogAdapter.ViewHolder>() {
+class CatalogAdapter (private val civilizations: ArrayList<Civilization>): RecyclerView.Adapter<CatalogAdapter.ViewHolder>() {
     companion object {
         const val LOG_KEY = "CatalogAdapter"
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val civilizationIcon = itemView.findViewById<ImageView>(R.id.CivilizationIcon)
-        val civilizationName = itemView.findViewById<TextView>(R.id.CivilizationName)
-        val civilizationRegion = itemView.findViewById<TextView>(R.id.CivilizationRegion)
-        val isFavorite = itemView.findViewById<ImageButton>(R.id.favoriteStar)
+        val civilizationIcon: ImageView = itemView.findViewById<ImageView>(R.id.CivilizationIcon)
+        val civilizationName: TextView = itemView.findViewById<TextView>(R.id.CivilizationName)
+        val civilizationRegion: TextView = itemView.findViewById<TextView>(R.id.CivilizationRegion)
+        val isFavorite: ImageButton = itemView.findViewById<ImageButton>(R.id.favoriteStar)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -79,5 +94,61 @@ class CatalogAdapter (private val civilizations: List<Civilization>): RecyclerVi
 
     override fun getItemCount(): Int {
         return civilizations.size
+    }
+
+    fun removeAt(position: Int) {
+        civilizations.removeAt(position)
+        notifyItemRemoved(position)
+    }
+}
+
+abstract class SwipeToDeleteCallback(private val context: Context) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+    private val deleteIcon: Drawable = ContextCompat.getDrawable(context, R.drawable.ic_delete_sweep)!!
+    private val background = ColorDrawable()
+
+    override fun onMove(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+    ): Boolean {
+        return false
+    }
+
+    override fun onChildDraw(
+        c: Canvas,
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        dX: Float,
+        dY: Float,
+        actionState: Int,
+        isCurrentlyActive: Boolean
+    ) {
+        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+
+        val itemView = viewHolder.itemView
+        val backgroundCornerOffset = 20
+
+        val iconMargin: Int = (itemView.height - deleteIcon.intrinsicHeight) / 2
+        val iconTop: Int = itemView.top + (itemView.height - deleteIcon.intrinsicHeight) / 2
+        val iconBottom: Int = iconTop + deleteIcon.intrinsicHeight
+
+        if (dX < 0) {
+            val iconLeft: Int = itemView.right - iconMargin - deleteIcon.intrinsicWidth
+            val iconRight = itemView.right - iconMargin
+            deleteIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+            background.setBounds(
+                itemView.right + dX.toInt() - backgroundCornerOffset,
+                itemView.top,
+                itemView.right,
+                itemView.bottom
+            )
+        } else if (dX == 0f) {
+            background.setBounds(0, 0, 0, 0)
+        }
+
+        background.color = context.getColor(R.color.catalog_delete_background)
+        background.draw(c)
+        deleteIcon.draw(c)
     }
 }
