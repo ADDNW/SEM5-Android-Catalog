@@ -55,10 +55,12 @@
             android:layout_height="27dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="4dp"
+            android:background="#00FFFFFF"
+            android:contentDescription="@string/empty"
+            android:src="@drawable/star_border_black_24dp"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars"
-            android:contentDescription="@string/empty" />
+            tools:srcCompat="@tools:sample/avatars" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

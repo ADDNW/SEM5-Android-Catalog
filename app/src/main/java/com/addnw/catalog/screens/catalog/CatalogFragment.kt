@@ -1,10 +1,8 @@
 package com.addnw.catalog.screens.catalog
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -51,7 +49,7 @@ class CatalogFragment : Fragment() {
         )
 
         civilizations = viewModel.getCivilizationList()
-        binding.rvCatalog.adapter = CatalogAdapter(civilizations)
+        binding.rvCatalog.adapter = CatalogAdapter(civilizations, viewModel)
         binding.rvCatalog.layoutManager = LinearLayoutManager(context)
 
         val swipeHandler = object : SwipeToDeleteCallback(requireContext()) {
@@ -63,12 +61,15 @@ class CatalogFragment : Fragment() {
         ItemTouchHelper(swipeHandler).attachToRecyclerView(binding.rvCatalog)
         return binding.root
     }
+
 }
 
-class CatalogAdapter (private val civilizations: ArrayList<Civilization>): RecyclerView.Adapter<CatalogAdapter.ViewHolder>() {
+class CatalogAdapter (private val civilizations: ArrayList<Civilization>, private val viewModel: CivilizationViewModel): RecyclerView.Adapter<CatalogAdapter.ViewHolder>() {
     companion object {
         const val LOG_KEY = "CatalogAdapter"
     }
+
+    lateinit var context: Context
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val civilizationIcon: ImageView = itemView.findViewById<ImageView>(R.id.CivilizationIcon)
@@ -78,18 +79,20 @@ class CatalogAdapter (private val civilizations: ArrayList<Civilization>): Recyc
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val context = parent.context
+        context = parent.context
         val inflater = LayoutInflater.from(context)
         val civilizationView = inflater.inflate(R.layout.catalog_row, parent, false)
         return ViewHolder(civilizationView)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: CatalogAdapter.ViewHolder, position: Int) {
         val entry = civilizations[position]
         //TODO add civilization-based texts and icons
         holder.civilizationName.text = "CIV_NAME"
         holder.civilizationRegion.text = "CIV_REGION"
-        Log.d(LOG_KEY, "bind at $position")
+
+        holder.isFavorite.setOnClickListener { switchFavorite(position, holder) }
     }
 
     override fun getItemCount(): Int {
@@ -99,6 +102,13 @@ class CatalogAdapter (private val civilizations: ArrayList<Civilization>): Recyc
     fun removeAt(position: Int) {
         civilizations.removeAt(position)
         notifyItemRemoved(position)
+        viewModel.removeCivilization(position)
+    }
+
+    private fun switchFavorite(position: Int, holder: CatalogAdapter.ViewHolder) {
+        civilizations[position].favourite = viewModel.switchFavourite(position)
+        if (civilizations[position].favourite) holder.isFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.star_black_24dp))
+        else holder.isFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.star_border_black_24dp))
     }
 }
 

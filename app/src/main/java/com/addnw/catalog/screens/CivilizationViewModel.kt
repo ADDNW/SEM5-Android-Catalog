@@ -76,12 +76,17 @@ class CivilizationViewModel: ViewModel() {
         Log.d(LOG_KEY, "removed: $removed")
     }
 
+    fun switchFavourite(index: Int): Boolean {
+        civilizations[index].favourite = ! civilizations[index].favourite
+        return civilizations[index].favourite
+    }
+
     fun getCivilizationList(): ArrayList<Civilization> {
         return civilizations.toList() as ArrayList<Civilization>;
     }
 }
 
-class Civilization(val name: String, val leader: String, val region: Region, val graphics: List<String>, val traits: List<String>)
+class Civilization(val name: String, val leader: String, val region: Region, val graphics: List<String>, val traits: List<String>, var favourite: Boolean = false)
 
 enum class Region {
     EUROPE,
