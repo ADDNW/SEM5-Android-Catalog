@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Catalog</string>
     <string name="empty" />
+    <string name="category_all">All</string>
+    <string name="category_europe">Europe</string>
+    <string name="category_indian">Indian</string>
+    <string name="category_america">America</string>
+    <string name="category_africa">Africa</string>
+    <string name="category_asia">Asia</string>
+    <string name="category_favourite">Favourites</string>
 </resources>

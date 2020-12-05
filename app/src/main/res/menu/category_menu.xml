@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/category_all"
+        android:title="@string/category_all"/>
+    <item android:id="@+id/category_favourite"
+        android:title="@string/category_favourite"/>
+    <item android:id="@+id/category_europe"
+        android:title="@string/category_europe"/>
+    <item android:id="@+id/category_indian"
+        android:title="@string/category_indian"/>
+    <item android:id="@+id/category_america"
+        android:title="@string/category_america"/>
+    <item android:id="@+id/category_africa"
+        android:title="@string/category_africa"/>
+    <item android:id="@+id/category_asia"
+        android:title="@string/category_asia"/>
+</menu>

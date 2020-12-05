@@ -7,9 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -23,6 +21,7 @@ import com.addnw.catalog.R
 import com.addnw.catalog.databinding.FragmentCatagogBinding
 import com.addnw.catalog.screens.Civilization
 import com.addnw.catalog.screens.CivilizationViewModel
+import com.addnw.catalog.screens.Region
 
 class CatalogFragment : Fragment() {
     companion object {
@@ -33,7 +32,7 @@ class CatalogFragment : Fragment() {
 
     private lateinit var viewModel: CivilizationViewModel
 
-    private lateinit var civilizations: ArrayList<Civilization>
+    private lateinit var civilizations: MutableList<Civilization>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,12 +58,42 @@ class CatalogFragment : Fragment() {
         }
 
         ItemTouchHelper(swipeHandler).attachToRecyclerView(binding.rvCatalog)
+        setHasOptionsMenu(true)
         return binding.root
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        Log.d(LOG_KEY, "Options menu created")
+        inflater.inflate(R.menu.category_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.category_all -> filter(null, false)
+            R.id.category_favourite -> filter(null, true)
+            R.id.category_europe -> filter(Region.EUROPE, false)
+            R.id.category_africa -> filter(Region.AFRICA, false)
+            R.id.category_america -> filter(Region.AMERICA, false)
+            R.id.category_asia -> filter(Region.ASIA, false)
+            R.id.category_indian -> filter(Region.INDIAN, false)
+        }
+        return true
+    }
+
+    private fun filter(option: Region?, byFavourite: Boolean) {
+        if (byFavourite) {
+            (binding.rvCatalog.adapter as CatalogAdapter).filterFavourite()
+            Log.d(LOG_KEY, "Selected category: Favourite")
+        } else {
+            (binding.rvCatalog.adapter as CatalogAdapter).filter(option)
+            Log.d(LOG_KEY, "Selected category: $option")
+        }
+
+    }
 }
 
-class CatalogAdapter (private val civilizations: ArrayList<Civilization>, private val viewModel: CivilizationViewModel): RecyclerView.Adapter<CatalogAdapter.ViewHolder>() {
+class CatalogAdapter (private var civilizations: MutableList<Civilization>, private val viewModel: CivilizationViewModel): RecyclerView.Adapter<CatalogAdapter.ViewHolder>() {
     companion object {
         const val LOG_KEY = "CatalogAdapter"
     }
@@ -85,13 +114,16 @@ class CatalogAdapter (private val civilizations: ArrayList<Civilization>, privat
         return ViewHolder(civilizationView)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: CatalogAdapter.ViewHolder, position: Int) {
         val entry = civilizations[position]
-        //TODO add civilization-based texts and icons
-        holder.civilizationName.text = "CIV_NAME"
-        holder.civilizationRegion.text = "CIV_REGION"
+        holder.civilizationName.text = entry.name
+        holder.civilizationRegion.text = entry.region.toString()
+        holder.civilizationIcon.setImageDrawable(
+             ContextCompat.getDrawable(context, context.resources.getIdentifier(entry.graphics[0], "drawable", context.packageName))
+        )
 
+        if (entry.favourite) holder.isFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.star_black_24dp))
+        else holder.isFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.star_border_black_24dp))
         holder.isFavorite.setOnClickListener { switchFavorite(position, holder) }
     }
 
@@ -109,6 +141,17 @@ class CatalogAdapter (private val civilizations: ArrayList<Civilization>, privat
         civilizations[position].favourite = viewModel.switchFavourite(position)
         if (civilizations[position].favourite) holder.isFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.star_black_24dp))
         else holder.isFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.star_border_black_24dp))
+    }
+
+    fun filter(region: Region?) {
+        civilizations = viewModel.filter(region)
+        notifyDataSetChanged()
+
+    }
+
+    fun filterFavourite() {
+        civilizations = viewModel.filterFavourite()
+        notifyDataSetChanged()
     }
 }
 
