@@ -91,117 +91,113 @@ class CatalogFragment : Fragment() {
         }
 
     }
-}
 
-class CatalogAdapter (private var civilizations: MutableList<Civilization>, private val viewModel: CivilizationViewModel): RecyclerView.Adapter<CatalogAdapter.ViewHolder>() {
-    companion object {
-        const val LOG_KEY = "CatalogAdapter"
-    }
+    private inner class CatalogAdapter (private var civilizations: MutableList<Civilization>, private val viewModel: CivilizationViewModel): RecyclerView.Adapter<CatalogAdapter.ViewHolder>() {
+        lateinit var context: Context
 
-    lateinit var context: Context
-
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val civilizationIcon: ImageView = itemView.findViewById<ImageView>(R.id.CivilizationIcon)
-        val civilizationName: TextView = itemView.findViewById<TextView>(R.id.CivilizationName)
-        val civilizationRegion: TextView = itemView.findViewById<TextView>(R.id.CivilizationRegion)
-        val isFavorite: ImageButton = itemView.findViewById<ImageButton>(R.id.favoriteStar)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        context = parent.context
-        val inflater = LayoutInflater.from(context)
-        val civilizationView = inflater.inflate(R.layout.catalog_row, parent, false)
-        return ViewHolder(civilizationView)
-    }
-
-    override fun onBindViewHolder(holder: CatalogAdapter.ViewHolder, position: Int) {
-        val entry = civilizations[position]
-        holder.civilizationName.text = entry.name
-        holder.civilizationRegion.text = entry.region.toString()
-        holder.civilizationIcon.setImageDrawable(
-             ContextCompat.getDrawable(context, context.resources.getIdentifier(entry.graphics[0], "drawable", context.packageName))
-        )
-
-        if (entry.favourite) holder.isFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.star_black_24dp))
-        else holder.isFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.star_border_black_24dp))
-        holder.isFavorite.setOnClickListener { switchFavorite(position, holder) }
-    }
-
-    override fun getItemCount(): Int {
-        return civilizations.size
-    }
-
-    fun removeAt(position: Int) {
-        civilizations.removeAt(position)
-        notifyItemRemoved(position)
-        viewModel.removeCivilization(position)
-    }
-
-    private fun switchFavorite(position: Int, holder: CatalogAdapter.ViewHolder) {
-        civilizations[position].favourite = viewModel.switchFavourite(position)
-        if (civilizations[position].favourite) holder.isFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.star_black_24dp))
-        else holder.isFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.star_border_black_24dp))
-    }
-
-    fun filter(region: Region?) {
-        civilizations = viewModel.filter(region)
-        notifyDataSetChanged()
-
-    }
-
-    fun filterFavourite() {
-        civilizations = viewModel.filterFavourite()
-        notifyDataSetChanged()
-    }
-}
-
-abstract class SwipeToDeleteCallback(private val context: Context) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-
-    private val deleteIcon: Drawable = ContextCompat.getDrawable(context, R.drawable.ic_delete_sweep)!!
-    private val background = ColorDrawable()
-
-    override fun onMove(
-        recyclerView: RecyclerView,
-        viewHolder: RecyclerView.ViewHolder,
-        target: RecyclerView.ViewHolder
-    ): Boolean {
-        return false
-    }
-
-    override fun onChildDraw(
-        c: Canvas,
-        recyclerView: RecyclerView,
-        viewHolder: RecyclerView.ViewHolder,
-        dX: Float,
-        dY: Float,
-        actionState: Int,
-        isCurrentlyActive: Boolean
-    ) {
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-
-        val itemView = viewHolder.itemView
-        val backgroundCornerOffset = 20
-
-        val iconMargin: Int = (itemView.height - deleteIcon.intrinsicHeight) / 2
-        val iconTop: Int = itemView.top + (itemView.height - deleteIcon.intrinsicHeight) / 2
-        val iconBottom: Int = iconTop + deleteIcon.intrinsicHeight
-
-        if (dX < 0) {
-            val iconLeft: Int = itemView.right - iconMargin - deleteIcon.intrinsicWidth
-            val iconRight = itemView.right - iconMargin
-            deleteIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
-            background.setBounds(
-                itemView.right + dX.toInt() - backgroundCornerOffset,
-                itemView.top,
-                itemView.right,
-                itemView.bottom
-            )
-        } else if (dX == 0f) {
-            background.setBounds(0, 0, 0, 0)
+        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val civilizationIcon: ImageView = itemView.findViewById<ImageView>(R.id.CivilizationIcon)
+            val civilizationName: TextView = itemView.findViewById<TextView>(R.id.CivilizationName)
+            val civilizationRegion: TextView = itemView.findViewById<TextView>(R.id.CivilizationRegion)
+            val isFavorite: ImageButton = itemView.findViewById<ImageButton>(R.id.favoriteStar)
         }
 
-        background.color = context.getColor(R.color.catalog_delete_background)
-        background.draw(c)
-        deleteIcon.draw(c)
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            context = parent.context
+            val inflater = LayoutInflater.from(context)
+            val civilizationView = inflater.inflate(R.layout.catalog_row, parent, false)
+            return ViewHolder(civilizationView)
+        }
+
+        override fun onBindViewHolder(holder: CatalogAdapter.ViewHolder, position: Int) {
+            val entry = civilizations[position]
+            holder.civilizationName.text = entry.name
+            holder.civilizationRegion.text = entry.region.toString()
+            holder.civilizationIcon.setImageDrawable(
+                    ContextCompat.getDrawable(context, context.resources.getIdentifier(entry.graphics[0], "drawable", context.packageName))
+            )
+
+            if (entry.favourite) holder.isFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.star_black_24dp))
+            else holder.isFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.star_border_black_24dp))
+            holder.isFavorite.setOnClickListener { switchFavorite(position, holder) }
+        }
+
+        override fun getItemCount(): Int {
+            return civilizations.size
+        }
+
+        fun removeAt(position: Int) {
+            civilizations.removeAt(position)
+            notifyItemRemoved(position)
+            viewModel.removeCivilization(position)
+        }
+
+        private fun switchFavorite(position: Int, holder: CatalogAdapter.ViewHolder) {
+            civilizations[position].favourite = viewModel.switchFavourite(position)
+            if (civilizations[position].favourite) holder.isFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.star_black_24dp))
+            else holder.isFavorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.star_border_black_24dp))
+        }
+
+        fun filter(region: Region?) {
+            civilizations = viewModel.filter(region)
+            notifyDataSetChanged()
+
+        }
+
+        fun filterFavourite() {
+            civilizations = viewModel.filterFavourite()
+            notifyDataSetChanged()
+        }
     }
+
+    private abstract inner class SwipeToDeleteCallback(private val context: Context) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+        private val deleteIcon: Drawable = ContextCompat.getDrawable(context, R.drawable.ic_delete_sweep)!!
+        private val background = ColorDrawable()
+
+        override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+        ): Boolean = false
+
+        override fun onChildDraw(
+                c: Canvas,
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                dX: Float,
+                dY: Float,
+                actionState: Int,
+                isCurrentlyActive: Boolean
+        ) {
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+
+            val itemView = viewHolder.itemView
+            val backgroundCornerOffset = 20
+
+            val iconMargin: Int = (itemView.height - deleteIcon.intrinsicHeight) / 2
+            val iconTop: Int = itemView.top + (itemView.height - deleteIcon.intrinsicHeight) / 2
+            val iconBottom: Int = iconTop + deleteIcon.intrinsicHeight
+
+            if (dX < 0) {
+                val iconLeft: Int = itemView.right - iconMargin - deleteIcon.intrinsicWidth
+                val iconRight = itemView.right - iconMargin
+                deleteIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+                background.setBounds(
+                        itemView.right + dX.toInt() - backgroundCornerOffset,
+                        itemView.top,
+                        itemView.right,
+                        itemView.bottom
+                )
+            } else if (dX == 0f) {
+                background.setBounds(0, 0, 0, 0)
+            }
+
+            background.color = context.getColor(R.color.catalog_delete_background)
+            background.draw(c)
+            deleteIcon.draw(c)
+        }
+    }
+
+    inner class CatalogListener
 }
