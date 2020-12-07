@@ -40,7 +40,7 @@ class CatalogFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         Log.d(LOG_KEY, "Created")
-        viewModel = ViewModelProvider(this).get(CivilizationViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(CivilizationViewModel::class.java)
 
         binding = FragmentCatagogBinding.inflate(
             inflater,
@@ -121,6 +121,7 @@ class CatalogFragment : Fragment() {
             val civilizationView = inflater.inflate(R.layout.catalog_row, parent, false)
             return ViewHolder(civilizationView, object : ICatalogClickListener {
                 override fun onCivilizationClicked(position: Int) {
+                    Log.d(LOG_KEY, "Show at position: $position")
                     viewModel.setCurrent(position)
                     Navigation.findNavController(view!!).navigate(R.id.action_catalogFragment_to_detailsFragment)
                 }

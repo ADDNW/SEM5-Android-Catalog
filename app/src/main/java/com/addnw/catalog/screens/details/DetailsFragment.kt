@@ -32,7 +32,7 @@ class DetailsFragment() : Fragment() {
                 false
         )
 
-        civilization = ViewModelProvider(this).get(CivilizationViewModel::class.java).getCurrent()
+        civilization = ViewModelProvider(requireActivity()).get(CivilizationViewModel::class.java).getCurrent()
 
         viewPager = binding.detailsVP
         viewPager.adapter = ScreenSlidePagerAdapter(this, civilization)

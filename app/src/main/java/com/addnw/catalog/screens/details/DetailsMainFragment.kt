@@ -38,15 +38,15 @@ class DetailsMainFragment(val civilization: Civilization) : Fragment() {
             civilizationName.text = civilization.name
 
             leaderIcon.setImageDrawable(
-                ContextCompat.getDrawable(context, context.resources.getIdentifier(civilization.graphics[Civilization.ICON], "drawable", context.packageName))
+                ContextCompat.getDrawable(context, context.resources.getIdentifier(civilization.graphics[Civilization.LEADER], "drawable", context.packageName))
             )
             leaderName.text = civilization.leader
 
             perkIcon1.setImageDrawable(
-                ContextCompat.getDrawable(context, context.resources.getIdentifier(civilization.graphics[Civilization.ICON], "drawable", context.packageName))
+                ContextCompat.getDrawable(context, context.resources.getIdentifier(civilization.graphics[Civilization.PERK1], "drawable", context.packageName))
             )
             perkIcon2.setImageDrawable(
-                ContextCompat.getDrawable(context, context.resources.getIdentifier(civilization.graphics[Civilization.ICON], "drawable", context.packageName))
+                ContextCompat.getDrawable(context, context.resources.getIdentifier(civilization.graphics[Civilization.PERK2], "drawable", context.packageName))
             )
         }
 

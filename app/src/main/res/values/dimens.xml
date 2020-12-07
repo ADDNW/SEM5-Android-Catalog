@@ -10,5 +10,9 @@
     <dimen name="detailsCivilizationIcon">200dp</dimen>
     <dimen name="detailsLeaderIcon">75dp</dimen>
     <dimen name="detailsPerkIcon">75dp</dimen>
-    <dimen name="galeryBig">300dp</dimen>
+    <dimen name="galleryBig">300dp</dimen>
+    <dimen name="gallerySmall">100dp</dimen>
+    <dimen name="perksTitle">30sp</dimen>
+    <dimen name="perksList">20sp</dimen>
+    <dimen name="perksLineSpace">12sp</dimen>
 </resources>

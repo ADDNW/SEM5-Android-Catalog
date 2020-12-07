@@ -9,46 +9,75 @@
 
     <ImageView
         android:id="@+id/galleryBig"
-        android:layout_width="@dimen/galeryBig"
-        android:layout_height="@dimen/galeryBig"
+        android:layout_width="@dimen/galleryBig"
+        android:layout_height="@dimen/galleryBig"
+        android:contentDescription="@string/empty"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.111"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <ImageButton
-        android:id="@+id/gallerySmall1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="55dp"
-        tools:layout_editor_absoluteY="387dp"
+        app:layout_constraintVertical_bias="0.078"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageButton
         android:id="@+id/gallerySmall2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="55dp"
-        tools:layout_editor_absoluteY="387dp"
+        android:layout_width="@dimen/gallerySmall"
+        android:layout_height="@dimen/gallerySmall"
+        android:background="@null"
+        android:contentDescription="@string/empty"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.437"
+        app:layout_constraintStart_toEndOf="@+id/gallerySmall1"
+        app:layout_constraintTop_toBottomOf="@+id/galleryBig"
+        app:layout_constraintVertical_bias="0.067"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageButton
-        android:id="@+id/gallerySmall3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="55dp"
-        tools:layout_editor_absoluteY="387dp"
+        android:id="@+id/gallerySmall1"
+        android:layout_width="@dimen/gallerySmall"
+        android:layout_height="@dimen/gallerySmall"
+        android:background="@null"
+        android:contentDescription="@string/empty"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.266"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/galleryBig"
+        app:layout_constraintVertical_bias="0.067"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageButton
         android:id="@+id/gallerySmall4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="55dp"
-        tools:layout_editor_absoluteY="387dp"
+        android:layout_width="@dimen/gallerySmall"
+        android:layout_height="@dimen/gallerySmall"
+        android:background="@null"
+        android:contentDescription="@string/empty"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.437"
+        app:layout_constraintStart_toEndOf="@+id/gallerySmall3"
+        app:layout_constraintTop_toBottomOf="@+id/gallerySmall2"
+        app:layout_constraintVertical_bias="0.288"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageButton
+        android:id="@+id/gallerySmall3"
+        android:layout_width="@dimen/gallerySmall"
+        android:layout_height="@dimen/gallerySmall"
+        android:background="@null"
+        android:contentDescription="@string/empty"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.266"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gallerySmall1"
+        app:layout_constraintVertical_bias="0.288"
         tools:srcCompat="@tools:sample/avatars" />
 
 
