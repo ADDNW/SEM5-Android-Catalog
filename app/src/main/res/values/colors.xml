@@ -10,4 +10,5 @@
     <color name="catalog_row_background">#FFC107</color>
     <color name="catalog_delete_background">#f44336</color>
     <color name="catalog_background">#111B4E</color>
+    <color name="details_background">#2196F3</color>
 </resources>

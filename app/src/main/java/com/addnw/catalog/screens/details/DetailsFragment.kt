@@ -6,17 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.addnw.catalog.databinding.FragmentDetailsBinding
 import com.addnw.catalog.screens.Civilization
+import com.addnw.catalog.screens.CivilizationViewModel
+import com.addnw.catalog.screens.Region
 
-class DetailsFragment(val civilization: Civilization) : Fragment() {
+class DetailsFragment() : Fragment() {
     companion object {
         const val LOG_KEY = "Details"
         const val PAGES = 3
     }
 
+    private lateinit var civilization: Civilization
     private lateinit var binding: FragmentDetailsBinding
     private lateinit var viewPager: ViewPager2
 
@@ -27,6 +31,8 @@ class DetailsFragment(val civilization: Civilization) : Fragment() {
                 container,
                 false
         )
+
+        civilization = ViewModelProvider(this).get(CivilizationViewModel::class.java).getCurrent()
 
         viewPager = binding.detailsVP
         viewPager.adapter = ScreenSlidePagerAdapter(this, civilization)
@@ -46,6 +52,4 @@ class DetailsFragment(val civilization: Civilization) : Fragment() {
             return DetailsMainFragment(civilization)
         }
     }
-}
-
 }

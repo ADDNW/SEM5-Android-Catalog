@@ -11,10 +11,12 @@ class CivilizationViewModel: ViewModel() {
     // active civilizations list
     private lateinit var civilizations: MutableList<Civilization>
     private lateinit var civilizationsFiltered: MutableList<Civilization>
+    private var currentCivilization: Civilization
 
     init {
         Log.d(LOG_KEY, "created")
         createList()
+        currentCivilization = civilizations[0]
     }
 
     private fun createList() {
@@ -102,11 +104,25 @@ class CivilizationViewModel: ViewModel() {
         civilizationsFiltered = (civilizations.filter { civ -> civ.favourite }).toMutableList()
         return civilizationsFiltered
     }
+
+    fun setCurrent(position: Int) {
+        currentCivilization = civilizationsFiltered[position]
+    }
+
+    fun getCurrent() : Civilization {
+        return currentCivilization
+    }
 }
 
 class Civilization(val name: String, val leader: String, val region: Region, val graphics: List<String>, val traits: List<String>, val id: Int = ID++, var favourite: Boolean = false) {
     companion object {
-        var ID = 0;
+        var ID = 0
+
+        // graphics indexes
+        val ICON = 0
+        val LEADER = 1
+        val PERK1 = 2
+        val PERK2 = 3
     }
 }
 

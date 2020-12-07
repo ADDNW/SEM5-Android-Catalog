@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -95,18 +96,38 @@ class CatalogFragment : Fragment() {
     private inner class CatalogAdapter (private var civilizations: MutableList<Civilization>, private val viewModel: CivilizationViewModel): RecyclerView.Adapter<CatalogAdapter.ViewHolder>() {
         lateinit var context: Context
 
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        inner class ViewHolder(itemView: View, private val listener: ICatalogClickListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
             val civilizationIcon: ImageView = itemView.findViewById<ImageView>(R.id.CivilizationIcon)
             val civilizationName: TextView = itemView.findViewById<TextView>(R.id.CivilizationName)
             val civilizationRegion: TextView = itemView.findViewById<TextView>(R.id.CivilizationRegion)
             val isFavorite: ImageButton = itemView.findViewById<ImageButton>(R.id.favoriteStar)
+
+            init {
+                itemView.setOnClickListener(this);
+            }
+
+            override fun onClick(v: View) {
+                if (v is ImageButton) {
+                    listener.onFavouriteClicked(adapterPosition, this);
+                } else {
+                    listener.onCivilizationClicked(adapterPosition);
+                }
+            }
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             context = parent.context
             val inflater = LayoutInflater.from(context)
             val civilizationView = inflater.inflate(R.layout.catalog_row, parent, false)
-            return ViewHolder(civilizationView)
+            return ViewHolder(civilizationView, object : ICatalogClickListener {
+                override fun onCivilizationClicked(position: Int) {
+                    viewModel.setCurrent(position)
+                    Navigation.findNavController(view!!).navigate(R.id.action_catalogFragment_to_detailsFragment)
+                }
+                override fun onFavouriteClicked(position: Int, holder: CatalogAdapter.ViewHolder) {
+                    switchFavorite( position , holder )
+                }
+            })
         }
 
         override fun onBindViewHolder(holder: CatalogAdapter.ViewHolder, position: Int) {
@@ -141,13 +162,17 @@ class CatalogFragment : Fragment() {
         fun filter(region: Region?) {
             civilizations = viewModel.filter(region)
             notifyDataSetChanged()
-
         }
 
         fun filterFavourite() {
             civilizations = viewModel.filterFavourite()
             notifyDataSetChanged()
         }
+    }
+
+    private interface ICatalogClickListener {
+        fun onCivilizationClicked(position: Int)
+        fun onFavouriteClicked(position: Int, holder: CatalogAdapter.ViewHolder)
     }
 
     private abstract inner class SwipeToDeleteCallback(private val context: Context) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -198,6 +223,4 @@ class CatalogFragment : Fragment() {
             deleteIcon.draw(c)
         }
     }
-
-    inner class CatalogListener
 }

@@ -9,5 +9,17 @@
         android:id="@+id/catalogFragment"
         android:name="com.addnw.catalog.screens.catalog.CatalogFragment"
         android:label="fragment_catagog"
-        tools:layout="@layout/fragment_catagog" />
+        tools:layout="@layout/fragment_catagog" >
+        <action
+            android:id="@+id/action_catalogFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.addnw.catalog.screens.details.DetailsFragment"
+        android:label="DetailsFragment" >
+        <action
+            android:id="@+id/action_detailsFragment_to_catalogFragment"
+            app:destination="@id/catalogFragment" />
+    </fragment>
 </navigation>
