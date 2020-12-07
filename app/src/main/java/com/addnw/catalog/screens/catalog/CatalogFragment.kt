@@ -149,9 +149,8 @@ class CatalogFragment : Fragment() {
         }
 
         fun removeAt(position: Int) {
-            civilizations.removeAt(position)
-            notifyItemRemoved(position)
             viewModel.removeCivilization(position)
+            notifyItemRemoved(position)
         }
 
         private fun switchFavorite(position: Int, holder: CatalogAdapter.ViewHolder) {

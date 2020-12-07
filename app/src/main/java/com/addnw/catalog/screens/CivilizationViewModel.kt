@@ -23,54 +23,89 @@ class CivilizationViewModel: ViewModel() {
         civilizations = mutableListOf<Civilization>(
             Civilization("America", "Washington", Region.AMERICA,
                 listOf("america","washington","b17", "minuteman"),
-                listOf("B17 (replaces Bomber)", "Minuteman (replaces Musketman)", "All land military units have +1 sight", "50% discount when purchasing tiles")
+                listOf("B17 (replaces Bomber)", "Minuteman (replaces Musketman)",
+                    "All land military units have +1 sight",
+                    "50% discount when purchasing tiles"
+                )
             ),
             Civilization("Aztec", "Montezuma", Region.INDIAN,
-                listOf("aztec", "montezuma", "jaguar", "floating_gardens"),
-                listOf("Jagur (replaces Warrior)", "Floating gardens (replaces Water mill)", "Gains culture for the empire from each enemy unit killed")
+                listOf("aztec", "montezuma", "jaguar", "aztec"),
+                listOf("Jagur (replaces Warrior)", "Floating gardens (replaces Water mill)",
+                    "Gains culture for the empire from each enemy unit killed"
+                )
             ),
             Civilization("China", "Wu Zetian", Region.ASIA,
-                listOf("china", "wu_zetian", "chu_ko_nu", "paper_maker"),
-                listOf("Chu-ko-nu (replaces Crossbwoman)", "Paper maker (replaces Library)", "The Great General combat bonus is doubled, and their spawn rate is increased by 50%")
+                listOf("china", "wu_zetian", "chu_ko_nu", "china"),
+                listOf("Chu-ko-nu (replaces Crossbwoman)", "Paper maker (replaces Library)",
+                    "The Great General combat bonus is doubled, and their spawn rate is increased by 50%"
+                )
+            ),
+            Civilization("Egypt", "Ramesses II", Region.AFRICA,
+                listOf("egypt", "ramesses_ii", "war_chariot", "egypt"),
+                listOf("War chariot (replaces Chariot archer)", "Burial tomb (replaces Temple)",
+                    "+20% production towards Wonder construction"
+                )
+            ),
+            Civilization("Ethiopia", "Haile Selassie", Region.AFRICA,
+                listOf("ethiopia", "haile_selassie", "mehal_sefari", "ethiopia"),
+                listOf("Mehal Sefari (replaces Rifleman)", "Stele (replaces Monument)",
+                    "Combat bonus (+20%) when fighting units from a Civilization with more Cities than Ethiopia"
+                )
             )
-//            ,
-//            Civilization("Egypt", "Ramesses II", Region.AFRICA,
-//                listOf("egypt", "ramesses_ii", "war_chariot", "burial_tomb"),
-//                listOf("War chariot (replaces Chariot archer)", "Burial tomb (replaces Temple)", "+20% production towards Wonder construction")
-//            ),
-//            Civilization("Ethiopia", "Haile Selassie", Region.AFRICA,
-//                listOf("ethiopia", "haile_selassie", "mehal_sefari", "stele"),
-//                listOf("Mehal Sefari (replaces Rifleman)", "Stele (replaces Monument)", "Combat bonus (+20%) when fighting units from a Civilization with more Cities than Ethiopia")
-//            )
-//            ,
-//            Civilization("Greece", "Alexander", Region.EUROPE,
-//                listOf(),
-//                listOf()
-//            ),
-//            Civilization("Huns", "Attila", Region.ASIA,
-//                listOf(),
-//                listOf()
-//            ),
-//            Civilization("India", "Gandhi", Region.ASIA,
-//                listOf(),
-//                listOf()
-//            ),
-//            Civilization("Iroquois", "Hiawatha", Region.INDIAN,
-//                listOf(),
-//                listOf()
-//            ),
-//            Civilization("Russia", "Catherine", Region.EUROPE,
-//                listOf(),
-//                listOf()
-//            ),
-//            Civilization("Spanish", "Isabella", Region.EUROPE,
-//                listOf(),
-//                listOf()
-//            ),
-//            Civilization("Venice", "Enrico Dandolo", Region.EUROPE,
-//                listOf(),
-//                listOf()
-//            )
+            ,
+            Civilization("Greece", "Alexander", Region.EUROPE,
+                listOf("greece", "alexander", "companion_cavalry", "hoplite"),
+                listOf("Companion cavalry (replaces Horseman)", "Hoplite (replaces Spearman)",
+                    "City-State influence degrades at half and recovers at twice the normal rate",
+                    "Hidden: Even if Greek units end their turn within neutral, unfriendly or hostile city-state borders, Greece will not lose influence with them and the units will heal as if they were on friendly territory."
+                )
+            ),
+            Civilization("Huns", "Attila", Region.ASIA,
+                listOf("huns", "attila", "battering_ram", "horse_archer"),
+                listOf("Battering ram (replaces Spearman)", "Horse archer (replaces Chariot Archer)",
+                    "Raze Cities at double speed",
+                    "Borrow City names from other in-game Civ",
+                    "Start with Animal Husbandry technology",
+                    "+1 production per Pasture"
+                )
+            ),
+            Civilization("India", "Gandhi", Region.ASIA,
+                listOf("india", "gandhi", "war_elephant", "india"),
+                listOf("War elephant (replaces Chariot archer)", "Mughal fort (replaces Castle)",
+                    "Unhappiness from number of Cities doubled",
+                    "Unhappiness from number of Citizens halved"
+                )
+            ),
+            Civilization("Iroquois", "Hiawatha", Region.INDIAN,
+                listOf("iroquois", "hiawatha", "mohawk_warrior", "iroquois"),
+                listOf("Mohawk warrior (replaces Swordsman)", "Longhouse (replaces Workshop)",
+                    "Units move through Forest and Jungle in friendly territory as if they were Roads",
+                    "These tiles can be used to establish City Connections upon researching The Wheel",
+                    "Caravans move along Forest and Jungle as if they were Roads"
+                )
+            ),
+            Civilization("Russia", "Catherine", Region.EUROPE,
+                listOf("russia", "catherine", "cossack", "russia"),
+                listOf("Cossack (replaces Cavalry)", "Krepost (replaces Barracks)",
+                    "Strategic Resources provide +1 production, and Horse, Iron and Uranium Resources provide double quantity"
+                )
+            ),
+            Civilization("Spain", "Isabella", Region.EUROPE,
+                listOf("spain", "isabella", "tercio", "conquistador"),
+                listOf("Tercio (replaces Musketman)", "Conquistador (replaces Knight)",
+                    "Gold bonus for discovering a Natural Wonder (bonus enhanced if first to discover it)",
+                    "Culture, Happiness and tile yields from Natural Wonders doubled"
+                )
+            ),
+            Civilization("Venice", "Enrico Dandolo", Region.EUROPE,
+                listOf("venice", "enrico_dandolo", "merchant_of_venice", "great_galleass"),
+                listOf("Merchant of Venice (replaces Great merchant)", "Great galleass (replaces Galleass)",
+                    "Cannot gain settlers or annex cities",
+                    "Double the normal number of trade routes available",
+                    "A Merchant of Venice appears after researching Optics",
+                    "May purchase in puppeted cities"
+                )
+            )
         )
         civilizationsFiltered = civilizations.toMutableList()
         Log.d(LOG_KEY, "added ${civilizations.size} civilizations")
@@ -79,7 +114,7 @@ class CivilizationViewModel: ViewModel() {
     fun removeCivilization(index: Int) {
         val removed = civilizationsFiltered.removeAt(index)
         civilizations.remove(removed)
-        Log.d(LOG_KEY, "removed: $removed")
+        Log.d(LOG_KEY, "removed: ${removed.name}")
     }
 
     fun switchFavourite(index: Int): Boolean {
